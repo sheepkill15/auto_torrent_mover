@@ -52,9 +52,11 @@ yargs(hideBin(process.argv))
       });
     },
     (argv) => {
+      logger.log('Processing file...');
       if (!validateInput(argv)) {
         return;
       }
+      logger.log('Passed validation');
 
       assertFile(argv["file"], argv["savePath"]);
     }
@@ -79,19 +81,23 @@ function assertFile(file: string, folder: string) {
     return;
   }
 
+  logger.log('Checking destination');
   const dest = path.join(folder, name);
   if (!fs.existsSync(dest)) {
     fs.mkdirSync(dest);
+    logger.log(`Destination folder created: ${dest}`);
   }
 
   try {
+    logger.log('Copying file...');
     const src = path.join(folder, file);
     fs.copyFileSync(src, path.join(dest, file));
+    logger.log('File copied. Starting removing old file...');
     fs.unlinkSync(src);
     logger.log("Moved!");
     logger.log(`Source: ${src}\nDest: ${dest}`);
   } catch (e) {
-    logger.log(e);
+    logger.log(`ERROR: ${e}`);
   }
 }
 
