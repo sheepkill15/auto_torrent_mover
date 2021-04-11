@@ -87,7 +87,7 @@ function assertFile(file: string, folder: string) {
   try {
     const src = path.join(folder, file);
     fs.copyFileSync(src, path.join(dest, file));
-    fs.rmSync(src);
+    fs.unlinkSync(src);
     logger.log("Moved!");
     logger.log(`Source: ${src}\nDest: ${dest}`);
   } catch (e) {
