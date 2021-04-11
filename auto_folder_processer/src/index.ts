@@ -1,6 +1,5 @@
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
-import path from "path";
 import fs from "fs";
 import { exec } from "child_process";
 

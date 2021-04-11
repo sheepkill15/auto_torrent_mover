@@ -1,10 +1,9 @@
 {
-  "name": "auto_folder",
+  "name": "auto_torrent_mover",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "init": "npm i -g pkg && npm i",
     "build-dev": "npx tsc",
     "build": "rimraf ./build && tsc && pkg --output build/binaries/script ."
   },
