@@ -21,6 +21,7 @@ export class ConfigLoader {
         logLevel: "BOTH",
         defaultCategory: "Anime",
       };
+      this.createConfigFile();
     }
   }
 
@@ -32,5 +33,9 @@ export class ConfigLoader {
     logger.log(
       `Succesfully loaded config: ${JSON.stringify(this.currentConfig)}`
     );
+  }
+
+  private createConfigFile() {
+    fs.writeFileSync(configFileLocation, JSON.stringify(this.currentConfig));
   }
 }
