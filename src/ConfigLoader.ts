@@ -12,10 +12,10 @@ export class ConfigLoader {
   private currentConfig: { [key: string]: string };
 
   constructor() {
-    const configFile = fs.readFileSync(configFileLocation);
-    if (configFile) {
+    try {
+      const configFile = fs.readFileSync(configFileLocation);
       this.currentConfig = JSON.parse((configFile as unknown) as string);
-    } else {
+    } catch (_err) {
       this.currentConfig = {
         logFileName: "myScript.log",
         logLevel: "BOTH",
