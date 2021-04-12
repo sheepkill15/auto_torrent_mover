@@ -94,33 +94,56 @@ function assertFile(file: string, folder: string) {
     fs.copyFileSync(src, path.join(dest, file));
     logger.log('File copied. Starting removing old file...');
     fs.unlinkSync(src);
-    logger.log("Moved!");
+    if (fs.existsSync(src)) {
+      logger.log("File still exists!");
+      tryRemoveFile(src);
+    }
+    else {
+      logger.log("Moved!");
+    }
     logger.log(`Source: ${src}\nDest: ${dest}`);
   } catch (e) {
     logger.log(`ERROR: ${e}`);
   }
 }
 
+async function tryRemoveFile(src: string) {
+  try {
+    for (let i = 0; i < parseInt(config.get("removeTries")); i++) {
+      logger.log(`Removing old file attempt ${i}`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      fs.unlinkSync(src);
+      if (!fs.existsSync(src)) {
+        logger.log("File removed");
+        return;
+      }
+    }
+    logger.log("Failed to remove file");
+  } catch(e) {
+    logger.log(`ERROR: ${e}`);
+  }
+}
+
 type ArgvType = Arguments<
   Omit<{}, "file" | "savePath" | "fileCount" | "category"> &
-    InferredOptionTypes<{
-      file: {
-        type: "string";
-        demandOption: true;
-      };
-      savePath: {
-        type: "string";
-        demandOption: true;
-      };
-      fileCount: {
-        type: "number";
-        demandOption: false;
-      };
-      category: {
-        type: "string";
-        demandOption: false;
-      };
-    }>
+  InferredOptionTypes<{
+    file: {
+      type: "string";
+      demandOption: true;
+    };
+    savePath: {
+      type: "string";
+      demandOption: true;
+    };
+    fileCount: {
+      type: "number";
+      demandOption: false;
+    };
+    category: {
+      type: "string";
+      demandOption: false;
+    };
+  }>
 >;
 
 function validateInput(argv: ArgvType): boolean {

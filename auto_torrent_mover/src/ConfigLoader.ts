@@ -6,7 +6,7 @@ import { Logger } from "./Logger";
 const homedir = os.homedir();
 const configFileLocation = path.join(homedir, ".myScript.config.json");
 
-export type ConfigTypes = "logFileName" | "logLevel" | "defaultCategory";
+export type ConfigTypes = "logFileName" | "logLevel" | "defaultCategory" | "removeTries";
 
 export class ConfigLoader {
   private currentConfig: { [key: string]: string };
@@ -20,6 +20,7 @@ export class ConfigLoader {
         logFileName: "myScript.log",
         logLevel: "BOTH",
         defaultCategory: "Anime",
+        removeTries: "3"
       };
       this.createConfigFile();
     }
