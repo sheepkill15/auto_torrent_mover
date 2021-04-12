@@ -1,6 +1,6 @@
-import fs from "fs";
-import os from "os";
-import path from "path";
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
 
 const homedir = os.homedir();
 
@@ -36,7 +36,7 @@ export class Logger {
       case LogLevel.BOTH:
         console.log(formattedText);
       case LogLevel.FILE:
-        this.logToFile(formattedText + "\n");
+        this.logToFile(formattedText + '\n');
     }
   }
 
@@ -46,7 +46,7 @@ export class Logger {
 
   private createFile() {
     if (!fs.existsSync(this.filePath)) {
-      fs.writeFileSync(this.filePath, "");
+      fs.writeFileSync(this.filePath, '');
     }
   }
 }

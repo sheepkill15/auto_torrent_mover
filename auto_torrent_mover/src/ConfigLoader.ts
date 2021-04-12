@@ -1,12 +1,23 @@
-import fs from "fs";
-import os from "os";
-import path from "path";
-import { Logger } from "./Logger";
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import { Logger } from './Logger';
 
 const homedir = os.homedir();
-const configFileLocation = path.join(homedir, ".myScript.config.json");
+const configFileLocation = path.join(homedir, '.myScript.config.json');
 
-export type ConfigTypes = "logFileName" | "logLevel" | "defaultCategory" | "removeTries";
+const defaultConfigValues = {
+  logFileName: 'myScript.log',
+  logLevel: 'BOTH',
+  defaultCategory: 'Anime',
+  removeTries: '3',
+};
+
+export type ConfigTypes =
+  | 'logFileName'
+  | 'logLevel'
+  | 'defaultCategory'
+  | 'removeTries';
 
 export class ConfigLoader {
   private currentConfig: { [key: string]: string };
@@ -15,19 +26,15 @@ export class ConfigLoader {
     try {
       const configFile = fs.readFileSync(configFileLocation);
       this.currentConfig = JSON.parse((configFile as unknown) as string);
+      this.validateConfig();
     } catch (_err) {
-      this.currentConfig = {
-        logFileName: "myScript.log",
-        logLevel: "BOTH",
-        defaultCategory: "Anime",
-        removeTries: "3"
-      };
+      this.currentConfig = defaultConfigValues;
       this.createConfigFile();
     }
   }
 
   get(key: ConfigTypes): string {
-    return this.currentConfig[key] || "";
+    return this.currentConfig[key] || '';
   }
 
   printConfig(logger: Logger) {
@@ -38,5 +45,27 @@ export class ConfigLoader {
 
   private createConfigFile() {
     fs.writeFileSync(configFileLocation, JSON.stringify(this.currentConfig));
+  }
+
+  private set(key: ConfigTypes, value: string) {
+    this.currentConfig[key] = value;
+  }
+
+  private validateConfig() {
+    if (!this.get('logFileName')) {
+      this.set('logFileName', defaultConfigValues['logFileName']);
+    }
+
+    if (!this.get('logLevel')) {
+      this.set('logLevel', defaultConfigValues['logLevel']);
+    }
+
+    if (!this.get('defaultCategory')) {
+      this.set('defaultCategory', defaultConfigValues['defaultCategory']);
+    }
+
+    if (!this.get('removeTries')) {
+      this.set('removeTries', defaultConfigValues['removeTries']);
+    }
   }
 }
