@@ -1,6 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
+import process from 'process';
 
 const homedir = os.homedir();
 
@@ -11,12 +12,14 @@ export enum LogLevel {
 }
 
 export class Logger {
+  private pid: number;
   private filePath: string;
   private logLevel: LogLevel;
 
   constructor(fileName: string, logLevel?: LogLevel) {
     this.filePath = path.join(homedir, fileName);
     this.logLevel = logLevel || LogLevel.BOTH;
+    this.pid = process.pid;
 
     fileName && this.createFile();
     this.log(
@@ -28,7 +31,7 @@ export class Logger {
 
   log(text: string) {
     const timeStamp = new Date().toISOString();
-    const formattedText = `${timeStamp} - ${text}`;
+    const formattedText = `[${this.pid}]: ${timeStamp} - ${text}`;
     switch (this.logLevel) {
       case LogLevel.CONSOLE:
         console.log(formattedText);
