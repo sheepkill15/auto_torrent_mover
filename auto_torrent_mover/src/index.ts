@@ -102,7 +102,7 @@ function assertFile(file: string, folder: string) {
     logger.log('File copied. Starting removing old file...');
     fs.unlinkSync(src);
     logger.log('Moved!');
-    logger.log(`File moved! Source: ${src}\nDest: ${dest}`);
+    logger.log(`File moved! Source: ${src} - Dest: ${dest}`);
   } catch (e) {
     logger.log(`ERROR: ${e}`);
     tryRemoveFile(src);
