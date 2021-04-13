@@ -110,21 +110,19 @@ function assertFile(file: string, folder: string) {
 }
 
 async function tryRemoveFile(src: string) {
-  try {
-    const maxAttempts = parseInt(config.get('removeTries'));
-    for (let i = 0; i < maxAttempts; i++) {
-      logger.log(`Removing old file attempt ${i}`);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+  const maxAttempts = parseInt(config.get('removeTries'));
+  for (let i = 0; i < maxAttempts; i++) {
+    logger.log(`Removing old file attempt ${i}`);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
       fs.unlinkSync(src);
-      if (!fs.existsSync(src)) {
-        logger.log('File removed');
-        return;
-      }
+      logger.log('File removed');
+      return;
+    } catch (e) {
+      logger.log(`ERROR: ${e}`);
     }
-    logger.log('Failed to remove file');
-  } catch (e) {
-    logger.log(`ERROR: ${e}`);
   }
+  logger.log('Failed to remove file');
 }
 
 type ArgvType = Arguments<
