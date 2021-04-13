@@ -70,8 +70,9 @@ function assertFile(file: string, folder: string) {
     return;
   }
 
+  let name;
   try {
-    var name = fileRegex.exec(file)?.[1];
+    name = fileRegex.exec(file)?.[1].replace(/\.+$/, "");
     if (!name) {
       logger.log('Regex fail');
       return;
