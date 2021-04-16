@@ -52,20 +52,29 @@ export class ConfigLoader {
   }
 
   private validateConfig() {
+    let valid = true;
     if (!this.get('logFileName')) {
       this.set('logFileName', defaultConfigValues['logFileName']);
+      valid = false;
     }
 
     if (!this.get('logLevel')) {
       this.set('logLevel', defaultConfigValues['logLevel']);
+      valid = false;
     }
 
     if (!this.get('defaultCategory')) {
       this.set('defaultCategory', defaultConfigValues['defaultCategory']);
+      valid = false;
     }
 
     if (!this.get('removeTries')) {
       this.set('removeTries', defaultConfigValues['removeTries']);
+      valid = false;
+    }
+
+    if (!valid) {
+      this.createConfigFile();
     }
   }
 }
